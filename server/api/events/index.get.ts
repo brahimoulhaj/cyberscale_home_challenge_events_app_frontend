@@ -1,7 +1,8 @@
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
+    const query = getQuery(event)
 
-    const response = await fetch(`${config.public.apiUrl}/events`, {
+    const response = await fetch(`${config.public.apiUrl}/events?page=${query.page || 1}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -1,10 +1,10 @@
 <template>
     <SidebarProvider>
-        <AppSidebar />
+        <!-- <AppSidebar /> -->
         <SidebarInset>
             <main>
-                <div class="flex items-center w-full gap-2 p-2">
-                    <SidebarTrigger class="" />
+                <div class="flex items-center w-full gap-2 p-2 border-b">
+                    <!-- <SidebarTrigger class="" /> -->
                     <div class="mx-auto me-0 flex items-center gap-2">
                         <Button variant="outline" size="icon" class="shrink-0">
                             <Bell class="w-4 h-4" />
