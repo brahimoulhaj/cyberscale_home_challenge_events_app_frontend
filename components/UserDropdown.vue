@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { ChevronsUpDown, LogOut } from "lucide-vue-next"
+import { ChevronsUpDown, LogOut, LoaderCircle } from "lucide-vue-next"
 import { useSidebar } from "./ui/sidebar";
+
+const router = useRouter()
+const route = useRoute()
+
+const loggingOut = ref(false)
+
+const { isMobile } = useSidebar()
 
 defineProps({
   viewEmail: {
@@ -9,13 +16,24 @@ defineProps({
   }
 })
 
-const user = {
-  avatar: 'https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg',
-  name: "Brahim O.",
-  email: "brahimoulhaj17@gmail.com"
-}
+const currentUser = useState('currentUser')
+const user = computed(() => {
+  return {
+    avatar: 'https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg',
+    name: currentUser.value?.name,
+    email: currentUser.value?.email
+  };
+})
 
-const { isMobile } = useSidebar()
+const logout = async () => {
+  loggingOut.value = true
+  const response = await $fetch('/api/auth/logout', { method: 'POST' })
+  loggingOut.value = false
+  if (response) {
+    currentUser.value = null
+    router.push({ path: '/auth/login', query: { redirect: route.fullPath } })
+  }
+}
 </script>
 
 <template>
@@ -57,9 +75,11 @@ const { isMobile } = useSidebar()
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem class="cursor-pointer">
+          <DropdownMenuItem @click="logout" :disabled="loggingOut" class="cursor-pointer flex items-center gap-2" >
             <LogOut />
-            Log out
+            <span v-if="loggingOut">Logging out...</span>
+            <span v-else>Log out</span>
+            <LoaderCircle v-if="loggingOut" class="animate-spin mx-auto me-0" />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

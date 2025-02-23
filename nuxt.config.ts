@@ -4,7 +4,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
     'nuxt-lucide-icons',
-    'dayjs-nuxt'
+    'dayjs-nuxt',
+    '@vee-validate/nuxt',
   ],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
