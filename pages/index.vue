@@ -38,6 +38,8 @@
 </template>
 
 <script lang="ts" setup>
+import { toast } from 'vue-sonner'
+
 const route = useRoute();
 const router = useRouter();
 const currentUser = useState('currentUser');
@@ -49,9 +51,10 @@ const { $echo } = useNuxtApp()
 onMounted(() => {
   $echo.private(`JoinEvent.${currentUser.value.id}`)
     .listen('UserJoinAnEvent', (event: any) => {
-      console.log(event.participant.name, "joins", event.event.title);
+      toast.info('Great news! A new attendee joined your event!', {
+        description: `${event.participant.name} joins ${event.event.title}`,
+      })
       getEvents(Number(`${route.query.page || 1}`));
-      alert(`${event.participant.name} joins ${event.event.title}`);
     });
 })
 
