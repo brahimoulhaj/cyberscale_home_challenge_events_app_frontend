@@ -35,8 +35,8 @@
           <Progress :modelValue="100 * (event.countParticipants / event.maxParticipants)" />
         </div>
         <div v-if="!event.isPast && !isHost" class="mx-auto me-0">
-          <Button @click="$emit('attend', event)" v-if="!attended">Attend</Button>
-          <Button @click="$emit('leave', event)" v-else variant="destructive">Leave</Button>
+          <Button @click.prevent="$emit('attend', event)" v-if="!attended">Attend</Button>
+          <Button @click.prevent="$emit('leave', event)" v-else variant="destructive">Leave</Button>
         </div>
       </div>
     </CardFooter>

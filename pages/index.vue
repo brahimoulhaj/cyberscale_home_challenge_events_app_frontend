@@ -7,8 +7,9 @@
       </NuxtLink>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch">
-      <EventCard v-for="event in data?.data ?? []" :key="event.id" :event="event" @attend="handleAttendEvent"
-        @leave="handleLeaveEvent" />
+      <NuxtLink :to="`/events/${event.slug}`" v-for="event in data?.data ?? []" :key="event.id">
+        <EventCard :event="event" @attend="handleAttendEvent" @leave="handleLeaveEvent" />
+      </NuxtLink>
     </div>
     <div v-if="data?.data?.length === 0" class="flex items-center justify-center h-full">
       No events
@@ -47,15 +48,19 @@ const currentUser = useState('currentUser');
 const data: any = ref([]);
 
 const { $echo } = useNuxtApp()
+const channel = computed(() => $echo.private(`JoinEvent.${currentUser.value.id}`))
 
 onMounted(() => {
-  $echo.private(`JoinEvent.${currentUser.value.id}`)
-    .listen('UserJoinAnEvent', (event: any) => {
-      toast.info('Great news! A new attendee joined your event!', {
-        description: `${event.participant.name} joins ${event.event.title}`,
-      })
-      getEvents(Number(`${route.query.page || 1}`));
-    });
+  channel.value.listen('UserJoinAnEvent', (event: any) => {
+    toast.info('Great news! A new attendee joined your event!', {
+      description: `${event.participant.name} joins ${event.event.title}`,
+    })
+    getEvents(Number(`${route.query.page || 1}`));
+  });
+})
+
+onBeforeRouteLeave(() => {
+  $echo.leave(channel.value);
 })
 
 const getEvents = async (page: number = 1) => {
@@ -70,13 +75,13 @@ const handlePageChange = (page: number) => {
 
 const handleAttendEvent = async (event: any) => {
   console.log('Attend event', event.id);
-  await $fetch(`api/events/${event.id}/attend`, { method: 'POST' });
+  await $fetch(`/api/events/${event.id}/attend`, { method: 'POST' });
   getEvents(Number(`${route.query.page || 1}`));
 }
 
 const handleLeaveEvent = async (event: any) => {
   console.log('Leave event', event.id);
-  await $fetch(`api/events/${event.id}/leave`, { method: 'POST' });
+  await $fetch(`/api/events/${event.id}/leave`, { method: 'POST' });
   getEvents(Number(`${route.query.page || 1}`));
 }
 
