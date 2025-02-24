@@ -48,19 +48,19 @@ const currentUser = useState('currentUser');
 const data: any = ref([]);
 
 const { $echo } = useNuxtApp()
-const channel = computed(() => $echo.private(`JoinEvent.${currentUser.value.id}`))
 
 onMounted(() => {
-  channel.value.listen('UserJoinAnEvent', (event: any) => {
-    toast.info('Great news! A new attendee joined your event!', {
-      description: `${event.participant.name} joins ${event.event.title}`,
-    })
-    getEvents(Number(`${route.query.page || 1}`));
-  });
+  $echo.private(`JoinEvent.${currentUser.value.id}`)
+    .listen('UserJoinAnEvent', (event: any) => {
+      toast.info('Great news! A new attendee joined your event!', {
+        description: `${event.participant.name} joins ${event.event.title}`,
+      })
+      getEvents(Number(`${route.query.page || 1}`));
+    });
 })
 
 onBeforeRouteLeave(() => {
-  $echo.leave(channel.value);
+  $echo.leave(`JoinEvent.${currentUser.value.id}`);
 })
 
 const getEvents = async (page: number = 1) => {

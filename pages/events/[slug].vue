@@ -1,5 +1,5 @@
 <template>
-  <div class="container max-w-5xl py-8" v-if="data?.data">
+  <div class="container max-w-5xl mx-auto py-8" v-if="data?.data">
     <!-- Event Header -->
     <div class="flex items-start justify-between mb-8">
       <div>
@@ -138,6 +138,7 @@
 </template>
 
 <script lang="ts" setup>
+import { toast } from 'vue-sonner'
 import {
   MapPin,
   Calendar as CalendarIcon,
@@ -159,7 +160,22 @@ const getEvent = async () => {
   loading.value = false;
 }
 
-onMounted(getEvent);
+const { $echo } = useNuxtApp()
+
+onMounted(() => {
+  getEvent()
+  $echo.private(`JoinEvent.${currentUser.value.id}.${route.params.slug}`)
+    .listen('UserJoinAnEvent', (event: any) => {
+      toast.info('Great news! A new attendee joined your event!', {
+        description: `${event.participant.name} joins ${event.event.title}`,
+      })
+      getEvent();
+    });
+})
+
+onBeforeRouteLeave(() => {
+  $echo.leave(`JoinEvent.${currentUser.value.id}`);
+})
 
 const attended = computed(() => {
   return data.value?.data.participants?.some(p => p.id === currentUser.value?.id);
