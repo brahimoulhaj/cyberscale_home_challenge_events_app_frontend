@@ -21,7 +21,11 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL
+      apiUrl: process.env.NUXT_PUBLIC_API_URL,
+      reverbKey: process.env.NUXT_PUBLIC_REVERB_APP_KEY,
+      reverbHost: process.env.NUXT_PUBLIC_REVERB_HOST,
+      reverbPort: process.env.NUXT_PUBLIC_REVERB_PORT,
+      reverbScheme: process.env.NUXT_PUBLIC_REVERB_SCHEME,
     }
   }
 })
