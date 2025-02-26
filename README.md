@@ -1,6 +1,4 @@
-# Nuxt Minimal Starter
-
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# Cyberscale home challenge, events app frontend
 
 ## Setup
 
@@ -9,15 +7,24 @@ Make sure to install dependencies:
 ```bash
 # npm
 npm install
+```
 
-# pnpm
-pnpm install
+## Environment Variables
 
-# yarn
-yarn install
+Make sure to set the following environment variables:
 
-# bun
-bun install
+```bash
+cp .env.example .env
+```
+
+```yml
+NUXT_PUBLIC_API_URL=http://localhost:8000 # Your Laravel API URL
+NODE_TLS_REJECT_UNAUTHORIZED=0  # For local development only, if you are using a self-signed certificate, like in Laravel Herd
+
+NUXT_PUBLIC_REVERB_APP_KEY= #put your Laravel Reverb app key here
+NUXT_PUBLIC_REVERB_HOST="localhost"
+NUXT_PUBLIC_REVERB_PORT=8080
+NUXT_PUBLIC_REVERB_SCHEME=http
 ```
 
 ## Development Server
@@ -27,49 +34,4 @@ Start the development server on `http://localhost:3000`:
 ```bash
 # npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
