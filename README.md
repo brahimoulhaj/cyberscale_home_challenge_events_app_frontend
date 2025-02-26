@@ -2,6 +2,8 @@
 
 ## Setup
 
+Make sure to install: Node 20.18.3 | npm 10.8.2
+
 Make sure to install dependencies:
 
 ```bash
